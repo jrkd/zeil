@@ -84,6 +84,19 @@
         "additionalProperties": false,
         "description": "The credit card number model"
       }
+    },
+    "securitySchemes": {
+      "ApiKey": {
+        "type": "apiKey",
+        "description": "API Key must be provided in the 'X-Api-Key' header",
+        "name": "X-Api-Key",
+        "in": "header"
+      }
     }
-  }
+  },
+  "security": [
+    {
+      "ApiKey": [ ]
+    }
+  ]
 }

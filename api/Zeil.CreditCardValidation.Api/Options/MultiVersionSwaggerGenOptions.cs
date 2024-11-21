@@ -27,5 +27,30 @@ public class MultiVersionSwaggerGenOptions(IApiVersionDescriptionProvider apiVer
             var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
             options.IncludeXmlComments(xmlPath);
         }
+
+        options.AddSecurityDefinition("ApiKey", new Microsoft.OpenApi.Models.OpenApiSecurityScheme
+        {
+            Description = "API Key must be provided in the 'X-Api-Key' header",
+            Type = Microsoft.OpenApi.Models.SecuritySchemeType.ApiKey,
+            Name = "X-Api-Key", // Header key
+            In = Microsoft.OpenApi.Models.ParameterLocation.Header,
+            Scheme = "ApiKeyScheme"
+        });
+
+        // Add a security requirement for the API key
+        options.AddSecurityRequirement(new Microsoft.OpenApi.Models.OpenApiSecurityRequirement
+        {
+            {
+                new Microsoft.OpenApi.Models.OpenApiSecurityScheme()
+                {
+                    Reference = new Microsoft.OpenApi.Models.OpenApiReference
+                    {
+                        Type = Microsoft.OpenApi.Models.ReferenceType.SecurityScheme,
+                        Id = "ApiKey" // Match the definition ID
+                    }
+                },
+                Array.Empty<string>() // No specific scopes required
+            }
+        });
     }
 }
