@@ -4,9 +4,9 @@ namespace Zeil.CreditCardValidation.Api.Services.Interfaces;
 public class LuhnValidationService : ILuhnValidationService
 {
 
-    //Followed from Stripe's guide - as wikipedia's one isnt very clear and stripe deals with a lot a CC
+    //<summary>Followed from Stripe's guide - as wikipedia's one isnt very clear and stripe deals with a lot a CC
     //https://stripe.com/nz/resources/more/how-to-use-the-luhn-algorithm-a-guide-in-applications-for-businesses#luhn-algorithm-formula
-    //In a real project i would use a prebuilt one, thats likely much faster than this eg https://github.com/marcosgiurni/LuhnNet/ 
+    //In a real project i would use a prebuilt one, thats likely much faster than this eg https://github.com/marcosgiurni/LuhnNet/ </summary>
     public async Task<bool> IsValid(string? number)
     {
         bool isValid = false;

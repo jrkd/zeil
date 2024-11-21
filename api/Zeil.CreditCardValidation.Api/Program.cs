@@ -1,31 +1,35 @@
 using System.Reflection;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ApiExplorer;
+using Microsoft.Extensions.Options;
+using Swashbuckle.AspNetCore.SwaggerGen;
+using Swashbuckle.AspNetCore.SwaggerUI;
+using Zeil.CreditCardValidation.Api;
 using Zeil.CreditCardValidation.Api.Services.Interfaces;
+
+
+var configuration = new ConfigurationBuilder()
+           .SetBasePath(AppContext.BaseDirectory)
+           .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
+           .Build();
 
 var builder = WebApplication.CreateBuilder(args);
 
+//Setup DI services
 builder.Services.AddSingleton<ILuhnValidationService, LuhnValidationService>();
+builder.Services.Configure<ApiAuthenticationOptions>(configuration.GetSection(nameof(ApiAuthenticationOptions)));
+builder.Services.AddSingleton<IConfigureOptions<SwaggerGenOptions>, MultiVersionSwaggerGenOptions>();
+builder.Services.AddSingleton<IConfigureOptions<SwaggerUIOptions>, MultiVersionSwaggerUIOptions>();
 
+//Setup api authentication scheme
+builder.Services.AddAuthentication("ApiKeyScheme")
+    .AddScheme<AuthenticationSchemeOptions, ApiKeyAuthenticationHandler>("ApiKeyScheme", options => { });
+builder.Services.AddAuthorization();
+
+//Setup api/controller/swagger spec
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen(options =>
-{
-    var provider = builder.Services.BuildServiceProvider().GetRequiredService<IApiVersionDescriptionProvider>();
-    foreach (var description in provider.ApiVersionDescriptions)
-    {
-        options.SwaggerDoc(description.GroupName, new Microsoft.OpenApi.Models.OpenApiInfo
-        {
-            Title = $"Credit card validation api {description.ApiVersion}",
-            Version = description.ApiVersion.ToString(),
-            Description = $"An api to verify a credit card number is valid with the use of the [Luhn algorithm](https://en.wikipedia.org/wiki/Luhn_algorithm)",
-            Contact = new() { Url = new Uri("https://zeil.com/"), Name = "Zeil" },
-        });
-        // Set the comments path for the Swagger JSON and UI.
-        var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
-        var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
-        options.IncludeXmlComments(xmlPath);
-    }
-});
+builder.Services.AddSwaggerGen();
 
 builder.Services.AddControllers();
 builder.Services.AddApiVersioning(options =>
@@ -43,16 +47,12 @@ builder.Services.AddApiVersioning(options =>
 var app = builder.Build();
 
 app.UseSwagger();
-app.UseSwaggerUI(options =>
-{
-    var provider = app.Services.GetRequiredService<IApiVersionDescriptionProvider>();
-    foreach (var description in provider.ApiVersionDescriptions)
-    {
-        options.SwaggerEndpoint($"/swagger/{description.GroupName}/swagger.json", description.GroupName);
-    }
-});
+app.UseSwaggerUI();
 
 app.UseHttpsRedirection();
+
+app.UseAuthentication();
+app.UseAuthorization();
 
 app.MapControllers().WithOpenApi();
 

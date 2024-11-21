@@ -13,12 +13,11 @@ public class CreditCardValidationController(ILuhnValidationService creditCardVal
     /// </summary>
     /// <response code="200">Card number validated</response>
     /// <response code="400">Card number is invalid</response>
+    /// /// <response code="401">Access denied</response>
     /// <response code="500">There was an unspecified problem.</response>
     [HttpPost]
-    [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(CreditCardValidationResponseModel), StatusCodes.Status200OK)]
     [Consumes("application/json")]
-    [Produces(typeof(CreditCardValidationResponseModel))]
     public async Task<IActionResult> Index(CreditCardValidationRequestModel requestModel)
     {
         var responseModel = new CreditCardValidationResponseModel

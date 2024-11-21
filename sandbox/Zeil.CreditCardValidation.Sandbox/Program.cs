@@ -35,6 +35,18 @@ public class Sandbox(ICreditCardValidationClient creditCardValidationClient)
             {
                 CardNumber = cardNumber
             });
+
+            //Version 1 of the api example (requires changing the nswag.json to point to the v1 json)
+            // try
+            // {
+            //     await creditCardValidationClient.CreditCardValidationAsync(cardNumber);
+            //     Console.WriteLine("☑️ The card number PASSES validation.");
+            // }
+            // catch (ApiException)
+            // {
+            //     Console.WriteLine("🚫 The card number FAILS validation.");
+            // }
+
             if (validationResult?.IsValid ?? false)
             {
                 Console.WriteLine("☑️ The card number PASSES validation.");

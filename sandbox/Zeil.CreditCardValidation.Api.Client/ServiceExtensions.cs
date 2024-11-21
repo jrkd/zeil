@@ -9,7 +9,7 @@ public static class ServiceExtensions
         services.AddHttpClient<ICreditCardValidationClient, CreditCardValidationClient>(client =>
         {
             client.BaseAddress = options.BaseAddress;
-            //TODO: include auth
+            client.DefaultRequestHeaders.Add("X-Api-Key", options.ApiKey);
         });
     }
 }

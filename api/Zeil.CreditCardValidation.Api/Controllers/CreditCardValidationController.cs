@@ -3,7 +3,9 @@ using Zeil.CreditCardValidation.Api.Services.Interfaces;
 
 namespace Zeil.CreditCardValidation.Api;
 
-
+/// <summary>
+/// CreditCardValidationController - API controller v1 for validation of credit card numbers.
+/// </summary>
 [ApiVersion("1.0")]
 public class CreditCardValidationController(ILuhnValidationService creditCardValidationService) : BaseApiController
 {
@@ -17,6 +19,7 @@ public class CreditCardValidationController(ILuhnValidationService creditCardVal
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
     [Consumes("application/json")]
     public async Task<IActionResult> Index(string cardNumber)
     {

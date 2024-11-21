@@ -26,9 +26,6 @@
           }
         },
         "responses": {
-          "500": {
-            "description": "There was an unspecified problem."
-          },
           "200": {
             "description": "Card number validated",
             "content": {
@@ -51,6 +48,12 @@
           },
           "400": {
             "description": "Card number is invalid"
+          },
+          "401": {
+            "description": "Access denied"
+          },
+          "500": {
+            "description": "There was an unspecified problem."
           }
         }
       }
