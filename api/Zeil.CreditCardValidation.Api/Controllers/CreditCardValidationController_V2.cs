@@ -1,10 +1,11 @@
 using Microsoft.AspNetCore.Mvc;
+using Zeil.CreditCardValidation.Api.Models;
 using Zeil.CreditCardValidation.Api.Services.Interfaces;
 
-namespace Zeil.CreditCardValidation.Api;
+namespace Zeil.CreditCardValidation.Api.V2;
 
 
-[ApiVersion("1.0")]
+[ApiVersion("2.0")]
 public class CreditCardValidationController(ICreditCardValidationService creditCardValidationService) : BaseApiController
 {
     /// <summary>
@@ -16,11 +17,10 @@ public class CreditCardValidationController(ICreditCardValidationService creditC
     [HttpPost]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status200OK)]
-    [ProducesResponseType(StatusCodes.Status500InternalServerError)]
     [Consumes("application/json")]
-    public async Task<IActionResult> Index(string cardNumber)
+    public async Task<IActionResult> Index(CreditCardValidationRequestModel requestModel)
     {
-        if (await creditCardValidationService.IsValid(cardNumber))
+        if (await creditCardValidationService.IsValid(requestModel.CardNumber))
         {
             return Ok();
         }
