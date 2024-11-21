@@ -1,4 +1,5 @@
 using Microsoft.Extensions.DependencyInjection;
+using Zeil.CreidtCardValidation.Api.Client;
 
 namespace Zeil.CreditCardValidation.Api.Client;
 
@@ -9,7 +10,7 @@ public static class ServiceExtensions
     {
         services.AddHttpClient<ICreditCardValidationClient, CreditCardValidationClient>(client =>
         {
-            //client.BaseAddress = options.BaseAddress;
+            client.BaseAddress = options.BaseAddress;
             //TODO: include auth
         });
     }

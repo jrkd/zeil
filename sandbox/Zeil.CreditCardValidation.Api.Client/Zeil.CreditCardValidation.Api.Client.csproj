@@ -11,6 +11,16 @@
     <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions"
       Version="8.0.1" />
     <PackageReference Include="Microsoft.Extensions.Http" Version="8.0.0" />
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
   </ItemGroup>
+
+
+  <ItemGroup>
+    <PackageRference Include="NSwag.ConsoleCore" Version="14.2.0" />
+  </ItemGroup>
+  <Target Name="GenerateApiClient" BeforeTargets="BeforeCompile">
+    <Exec Command="dotnet nswag run ./nswag.json" />
+    <Message Text="Generated API Client from Swagger JSON." Importance="high" />
+  </Target>
 
 </Project>

@@ -1,6 +1,4 @@
-﻿
-
-using Microsoft.Extensions.Configuration;
+﻿using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Zeil.CreditCardValidation.Api.Client;
@@ -33,8 +31,11 @@ public class Sandbox(ICreditCardValidationClient creditCardValidationClient)
             Console.WriteLine("Please input the credit card number to validate");
             var cardNumber = Console.ReadLine();
 
-            var validationResult = await creditCardValidationClient.Validate(cardNumber);
-            if (validationResult)
+            var validationResult = await creditCardValidationClient.CreditCardValidationAsync(new()
+            {
+                CardNumber = cardNumber
+            });
+            if (validationResult?.IsValid ?? false)
             {
                 Console.WriteLine("☑️ The card number PASSES validation.");
             }

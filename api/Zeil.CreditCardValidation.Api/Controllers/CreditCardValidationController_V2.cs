@@ -15,18 +15,16 @@ public class CreditCardValidationController(ICreditCardValidationService creditC
     /// <response code="400">Card number is invalid</response>
     /// <response code="500">There was an unspecified problem.</response>
     [HttpPost]
-    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status500InternalServerError)]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [Consumes("application/json")]
+    [Produces(typeof(CreditCardValidationResponseModel))]
     public async Task<IActionResult> Index(CreditCardValidationRequestModel requestModel)
     {
-        if (await creditCardValidationService.IsValid(requestModel.CardNumber))
+        var responseModel = new CreditCardValidationResponseModel
         {
-            return Ok();
-        }
-        else
-        {
-            return BadRequest();
-        }
+            IsValid = await creditCardValidationService.IsValid(requestModel.CardNumber)
+        };
+        return new JsonResult(responseModel);
     }
 }
