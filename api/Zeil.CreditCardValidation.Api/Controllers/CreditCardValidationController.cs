@@ -5,7 +5,7 @@ namespace Zeil.CreditCardValidation.Api;
 
 
 [ApiVersion("1.0")]
-public class CreditCardValidationController(ICreditCardValidationService creditCardValidationService) : BaseApiController
+public class CreditCardValidationController(ILuhnValidationService creditCardValidationService) : BaseApiController
 {
     /// <summary>
     /// Takes a card number and verifies it is a valid credit card number.      

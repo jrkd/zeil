@@ -5,7 +5,7 @@ using Zeil.CreditCardValidation.Api.Services.Interfaces;
 
 var builder = WebApplication.CreateBuilder(args);
 
-builder.Services.AddSingleton<ICreditCardValidationService, CreditCardValidationService>();
+builder.Services.AddSingleton<ILuhnValidationService, LuhnValidationService>();
 
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(options =>

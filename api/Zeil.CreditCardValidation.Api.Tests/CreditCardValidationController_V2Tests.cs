@@ -1,15 +1,17 @@
+using System.Text.Json;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.VisualStudio.TestPlatform.ObjectModel;
 using Moq;
+using Zeil.CreditCardValidation.Api.Models;
 using Zeil.CreditCardValidation.Api.Services.Interfaces;
 
 
 namespace Zeil.CreditCardValidation.Api.Tests;
 
 [TestFixture]
-public class CreditCardValidationControllerTests
+public class CreditCardValidationController_V2Tests
 {
-    private CreditCardValidationController creditCardValidationController;
+    private Zeil.CreditCardValidation.Api.V2.CreditCardValidationController creditCardValidationController;
     private Mock<ILuhnValidationService> mockedValidationService;
     [SetUp]
     public void Setup()
@@ -32,8 +34,17 @@ public class CreditCardValidationControllerTests
         Assert.NotNull(creditCardValidationController);
         mockedValidationService!.Setup(service => service.IsValid(cardNumber)).ReturnsAsync(expectedResult);
 
-        var actionResult = await creditCardValidationController!.Index(cardNumber);
-        Assert.IsInstanceOf<BadRequestResult>(actionResult);
+        var actionResult = await creditCardValidationController!.Index(new()
+        {
+            CardNumber = cardNumber ?? string.Empty
+        });
+        Assert.IsInstanceOf<JsonResult>(actionResult);
+        var result = actionResult as JsonResult;
+        Assert.NotNull(result);
+
+        var jsonStr = JsonSerializer.Serialize(result.Value);
+        var response = JsonSerializer.Deserialize<CreditCardValidationResponseModel>(jsonStr);
+        Assert.That(response!.IsValid, Is.EqualTo(expectedResult));
     }
 
 
@@ -72,7 +83,17 @@ public class CreditCardValidationControllerTests
         Assert.NotNull(creditCardValidationController);
         mockedValidationService!.Setup(service => service.IsValid(cardNumber)).ReturnsAsync(expectedResult);
 
-        var actionResult = await creditCardValidationController!.Index(cardNumber);
-        Assert.IsInstanceOf<OkResult>(actionResult);
+        var actionResult = await creditCardValidationController!.Index(new()
+        {
+            CardNumber = cardNumber ?? string.Empty
+        });
+        Assert.IsInstanceOf<JsonResult>(actionResult);
+        var result = actionResult as JsonResult;
+        Assert.NotNull(result);
+
+        var jsonStr = JsonSerializer.Serialize(result!.Value);
+        var response = JsonSerializer.Deserialize<CreditCardValidationResponseModel>(jsonStr);
+        Assert.IsNotNull(response);
+        Assert.That(response!.IsValid, Is.EqualTo(expectedResult));
     }
 }

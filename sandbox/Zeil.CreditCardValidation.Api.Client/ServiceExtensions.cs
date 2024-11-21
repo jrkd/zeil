@@ -1,6 +1,4 @@
 using Microsoft.Extensions.DependencyInjection;
-using Zeil.CreidtCardValidation.Api.Client;
-
 namespace Zeil.CreditCardValidation.Api.Client;
 
 
