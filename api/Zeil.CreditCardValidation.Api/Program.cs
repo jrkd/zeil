@@ -52,17 +52,6 @@ app.UseSwaggerUI(options =>
     }
 });
 
-if (app.Environment.IsDevelopment())
-{
-    // Save the Swagger JSON to a local file
-    var swaggerProvider = app.Services.GetRequiredService<IApiDescriptionGroupCollectionProvider>();
-    var swaggerGen = app.Services.GetRequiredService<Swashbuckle.AspNetCore.SwaggerGen.ISwaggerProvider>();
-    var swagger = swaggerGen.GetSwagger("v1");
-
-    var outputPath = Path.Combine(AppContext.BaseDirectory, "swagger.json");
-    File.WriteAllText(outputPath, Newtonsoft.Json.JsonConvert.SerializeObject(swagger));
-    Console.WriteLine($"Swagger JSON generated at: {outputPath}");
-}
 app.UseHttpsRedirection();
 
 app.MapControllers().WithOpenApi();
