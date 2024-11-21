@@ -25,24 +25,21 @@ Navigate to the Api folder
 Run the api 
 `dotnet watch run`
 
-Api by default should be configured be accessed via `http://localhost:5272` - this should redirect to the OpenApi html spec. 
+Api by default should be configured be accessed via `http://localhost:5272/swagger` - this should redirect to the OpenApi html spec. 
+
+The 
 
 ### Tests 
-To run the unit tests
-
-Navigate to the tests project folder
+To run the unit tests, navigate to the tests project folder
 `cd ./api/Zeil.CreditCardValidation.Api.Tests`
 
-run the tests from command line or IDE 
-`dotnet test`
+run the tests from command line `dotnet test` or IDE 
 
 ### Example client uses 
-To step through example C# client use 
-
-Navigate to the sandbox project folder 
+To step through example C# client use, navigate to the sandbox project folder 
 `cd ./sandbox/Zeil.CreditCardValidation.Sandbox`
 
-Update the sandbox appsettings.json to have a matching Api Key;
+Update the sandbox `appsettings.json` to have a matching api key;
 ```json
 {
     "CreditCardValidationOptions": {
@@ -51,6 +48,8 @@ Update the sandbox appsettings.json to have a matching Api Key;
     }
 }
 ```
+
+These can be anything, they just need to match each other.
 
 Then also make sure that either you also running the `Zeil.CreditCardValidation.Api` locally, and that the `CreditCardValidationOptions.BaseAddress` in `sandbox\Zeil.CreditCardValidation.Sandbox\appsettings.json` matches it. 
 
